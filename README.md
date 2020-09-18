@@ -1,0 +1,1 @@
+# argocd-using-contour-ingress
