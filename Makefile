@@ -70,7 +70,7 @@ argocd-pwd:
 	@echo "+-------------------------------------+"
 	@echo "| ArgoCD PWD                          |"
 	@echo "+-------------------------------------+"
-	k get pods -n argocd | grep argocd-server | awk '{print $1}'
+	kubectl get pods -n argocd | grep argocd-server | awk '{print $1}'
 
 helm-repos: 
 	helm repo add bitnami https://charts.bitnami.com/bitnami
