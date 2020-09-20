@@ -1,0 +1,39 @@
+server:
+  extraArgs: 
+    - "--insecure" 
+  ingress:
+    enabled: true
+    tls: 
+     - secretName: "argocert"
+       hosts: 
+       - "argocd.crashy.ninja"
+    
+    hosts: 
+     - "argocd.crashy.ninja"
+    
+    annotations:
+      kubernetes.io/ingress.class: "contour"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      ingress.kubernetes.io/force-ssl-redirect: true
+      kubernetes.io/tls-acme: true
+                    
+  ingressGrpc:
+    enabled: true
+    https: true
+    tls: 
+     - secretName: "argogrpccert"
+       hosts: 
+       - "grpc.argocd.crashy.ninja"
+    
+    hosts: 
+     - "grpc.argocd.crashy.ninja"
+    
+    annotations:
+      kubernetes.io/ingress.class: "contour"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      ingress.kubernetes.io/force-ssl-redirect: true
+      kubernetes.io/tls-acme: true
+  
+  service:
+    annotations:
+      projectcontour.io/upstream-protocol.h2c: "443,https"
