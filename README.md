@@ -1,7 +1,7 @@
 # argocd-using-contour-ingress
-This repo contains a step-by-step tutorial to setup Contour as Ingress Controller and to install and configure ArgoCD to exposes its endpoints using Contour. In order to expose the ArgoCD endpoints securly we will install and configure Cert-Manager with LetsEncrypt to be able to automatically provision SSL certificates for exposed services.
+This repo contains a step-by-step tutorial to set up Contour as an Ingress Controller and to install and configure ArgoCD to expose its endpoints using Contour. In order to expose the ArgoCD endpoints securely we will install and configure Cert-Manager with LetsEncrypt to be able to automatically provision SSL certificates for exposed services.
 
-I am using my test domain `crashy.ninja` in this tutorial, which is managed by AWS Route 53. At the of this tutorial the Argo UI will be available under `https://argocd.crashy.ninja` and the GRPC endpoint will be available under `https://grpc.crashy.ninja`.
+I am using my test domain `crashy.ninja` in this tutorial, which is managed by AWS Route 53. At the end of this tutorial the Argo UI will be available under `https://argocd.crashy.ninja` and the GRPC endpoint will be available under `https://grpc.crashy.ninja`.
 
 # Prerequisite
 * K8S Cluster on Hyperscaler with the ability to use Services of type Loadbalancer
@@ -10,8 +10,8 @@ I am using my test domain `crashy.ninja` in this tutorial, which is managed by A
 * ArgoCD CLI installed
 * Your own domain for which you can create A- and CNAME records
 
-# Setting up infra
-You can use the following command to setup all needed components (Ingress & Certmamanger) and in the end install ArgoCD with the needed configuration to expose its endpoint publically secured by Letsencrypt certificates. 
+# Installing and configuring all the components
+You can use the following command to set up all needed components (Ingress & Certmamanger) and in the end install ArgoCD with the needed configuration to expose its endpoint publically secured by Letsencrypt certificates. 
 
 
 ## Configure Helm repos of the used Helm Charts 
@@ -62,7 +62,7 @@ documentation:
 https://cert-manager.io/docs/usage/ingress/
 ```
 
-Once Certmanager is installed successfully, you need to replace occurrences of my email adress `andreas@bucksteeg.de` with your email address the following two files: `letsencrypt-prod.yaml` & `letsencrypt-staging.yaml` (under `acme.email`). Now you can install the two ClusterIssuer using the following `kubectl`commands.
+Once Certmanager is installed successfully, you need to replace occurrences of my email address `andreas@bucksteeg.de` with your email address the following two files: `letsencrypt-prod.yaml` & `letsencrypt-staging.yaml` (under `acme.email`). Now you can install the two ClusterIssuer using the following `kubectl`commands.
 ```
 $ kubectl apply -f letsencrypt-prod.yaml
 clusterissuer.cert-manager.io/letsencrypt-prod created
@@ -115,7 +115,7 @@ By default ArgoCD uses the name of the ArgoCD Server Pod as the password, execut
 $ kubectl get pods -n argocd | grep argocd-server | awk '{print $1}'
 argocd-server-cf675d48c-xs9xg
 ```
-Now you can login into the UI by opening the following URL: https://argocd.<YOUR-DOMAIN> (e.g. in my example https://argocd.crashy.ninja). You should now see the ArgoCD login page and your browser should display that the connection is secured with a valid certificate. Login in by using `admin` as user and the pwd you just copied in the step before. Now you should be logged in successfully and see and empty ArgoCD UI and admittely this is a bit boring. So lets configure an example App and use the CLI to do so:
+Now you can login into the UI by opening the following URL: https://argocd.<YOUR-DOMAIN> (e.g. in my example https://argocd.crashy.ninja). You should now see the ArgoCD login page and your browser should display that the connection is secured with a valid certificate. Login in by using `admin` as user and the pwd you just copied in the step before. Now you should be logged in successfully and see an empty ArgoCD UI and admittedly this is a bit boring. So let's configure an example App and use the CLI to do so:
 
 First lets log into ArgoCD using the CLI
 ```
